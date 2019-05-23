@@ -1,6 +1,10 @@
+import processing.sound.*;
+
 int MAX_VALUE = 100;
 int MIN_VALUE = -100;
 Visualizer v;
+
+AudioInputManager auin;
 
 /*You are simulating a visualizer of multiple values
  You need to create a display method first. 
@@ -11,15 +15,15 @@ class Visualizer {
   float [] values;
   float [] speeds;
   
-  int boxWidth = 400;
+  float boxWidth = 400;
   //int boxHeight = 200;
   int boxHeight = MAX_VALUE - MIN_VALUE;
   
   Visualizer(float x, float y) {
     this.x = x;
     this.y = y;
-    values = new float[10];
-    speeds = new float[10];
+    values = new float[512];
+    speeds = new float[512];
     for (int i = 0; i < values.length; i++) {
       values[i] = random(-99, 99);
       speeds[i] = random(2);
@@ -60,27 +64,34 @@ class Visualizer {
   }
   void update() {
     //???WRITE THIS METHOD SECOND!!!
-    for (int i = 0; i < values.length; i++) {
-      values[i] += speeds[i]; 
+    //for (int i = 0; i < values.length; i++) {
+    //  values[i] += speeds[i]; 
       
-      if (values[i] > MAX_VALUE) {
-        values[i] = MAX_VALUE;
-        speeds[i] = -speeds[i];
-      } else if (values[i] < MIN_VALUE) {
-        values[i] = MIN_VALUE;
-        speeds[i] = -speeds[i];
-      }
+    //  if (values[i] > MAX_VALUE) {
+    //    values[i] = MAX_VALUE;
+    //    speeds[i] = -speeds[i];
+    //  } else if (values[i] < MIN_VALUE) {
+    //    values[i] = MIN_VALUE;
+    //    speeds[i] = -speeds[i];
+    //  }
       
-    }
+    //}
+    
+    values = auin.getSpectrum();
   }
 }
 
 void setup() {
   size(600, 500);
   v = new Visualizer(20, 20);
+  
+  delay(400);
+  
+  auin = new AudioInputManager();
 }
 void draw() {
   background(255);
   v.display();
   v.update();
+  auin.updatePitch();
 }
